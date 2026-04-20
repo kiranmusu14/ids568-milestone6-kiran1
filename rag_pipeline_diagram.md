@@ -1,0 +1,108 @@
+# RAG Pipeline Architecture Diagram
+
+## System Overview
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        RAG PIPELINE — DATA FLOW                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ INDEXING PHASE (offline, run once)
+ ═══════════════════════════════════════════════════════════════════════════════
+
+  ┌──────────────┐     ┌─────────────────────────────────────────────────────┐
+  │  Raw         │     │  CHUNKER                                            │
+  │  Documents   │────▶│  • Strategy : Fixed-size character splitting        │
+  │  (10 docs,   │     │  • Chunk size: 512 characters                       │
+  │   .txt/str)  │     │  • Overlap   : 100 characters (~20%)                │
+  └──────────────┘     │  • Output   : List[{chunk_id, doc_id, text, ...}]   │
+                       └─────────────────────┬───────────────────────────────┘
+                                             │  chunks[]
+                                             ▼
+                       ┌─────────────────────────────────────────────────────┐
+                       │  EMBEDDER                                           │
+                       │  • Model : sentence-transformers/all-MiniLM-L6-v2  │
+                       │  • Dim   : 384 floats per chunk                     │
+                       │  • Norm  : L2 normalise → cosine similarity via IP  │
+                       │  • Batch : 32 chunks per forward pass               │
+                       └─────────────────────┬───────────────────────────────┘
+                                             │  embeddings [N × 384]
+                                             ▼
+                       ┌─────────────────────────────────────────────────────┐
+                       │  VECTOR STORE  (FAISS IndexFlatIP)                  │
+                       │  • Index type : IndexFlatIP (exact inner-product)   │
+                       │  • Vectors    : N chunk embeddings stored in RAM    │
+                       │  • Metadata   : chunk list kept in Python list      │
+                       │  • Serialised : faiss.write_index() → .index file   │
+                       └─────────────────────────────────────────────────────┘
+
+
+ QUERY PHASE (online, per user request)
+ ═══════════════════════════════════════════════════════════════════════════════
+
+  User Query
+      │
+      ▼
+  ┌────────────────────────────────────────┐
+  │  QUERY EMBEDDER                        │
+  │  Same all-MiniLM-L6-v2 model          │
+  │  → 384-dim vector, L2-normalised       │
+  │  Latency: ~500 ms on CPU (encoding)   │
+  └──────────────────┬─────────────────────┘
+                     │  query_vec [1 × 384]
+                     ▼
+  ┌────────────────────────────────────────┐
+  │  RETRIEVER                             │
+  │  faiss.IndexFlatIP.search(q, k=3)     │
+  │  Returns top-k chunks by cosine sim   │
+  │  Latency: <1 ms (FAISS search only)   │
+  └──────────────────┬─────────────────────┘
+                     │  retrieved_chunks [k × {text, score, metadata}]
+                     ▼
+  ┌────────────────────────────────────────┐   ◀── DECISION POINT
+  │  CONTEXT ASSEMBLY                      │   Is retrieved context sufficient?
+  │  • Concat k chunk texts                │   • Yes → proceed to generator
+  │  • Prepend source metadata            │   • No  → expand k or flag low conf
+  │  • Format into RAG prompt template    │
+  └──────────────────┬─────────────────────┘
+                     │  formatted_prompt
+                     ▼
+  ┌────────────────────────────────────────┐
+  │  GENERATOR  (Ollama / mistral:7b-inst) │
+  │  • Instruction: answer from context   │
+  │  • Instruction: say "I don't know"    │
+  │    if context is insufficient         │
+  │  • Temp : default (Ollama, ~0.8)      │
+  │  • Latency: 5–36 s on Apple Silicon   │
+  └──────────────────┬─────────────────────┘
+                     │  grounded_answer + latency
+                     ▼
+               Final Response
+
+
+ KEY COMPONENTS SUMMARY
+ ═══════════════════════════════════════════════════════════════════════════════
+
+  Component       Library / Model                 Role
+  ──────────────  ──────────────────────────────  ──────────────────────────────
+  Chunker         Python (custom)                 Splits docs into retrievable units
+  Embedder        sentence-transformers 2.7.0     Dense vector representation
+  Vector Store    FAISS 1.8.0 IndexFlatIP         Similarity search index
+  Retriever       FAISS search + metadata lookup  Returns top-k relevant chunks
+  Generator       Ollama 0.20.7 + mistral:7b-inst  Grounded answer generation
+  Evaluator       Custom metrics (P@k, R@k)       Measures retrieval + grounding
+
+
+ DATA TRANSFORMATIONS
+ ═══════════════════════════════════════════════════════════════════════════════
+
+  raw text
+    └─▶ [chunker]         → List[str]           (chunks, ~512 chars each)
+          └─▶ [embedder]  → np.ndarray [N,384]  (normalised float32 vectors)
+                └─▶ [FAISS] → persisted index
+  user query
+    └─▶ [embedder]        → np.ndarray [1,384]
+          └─▶ [FAISS.search] → (scores, indices)
+                └─▶ [context assembly] → str    (formatted prompt)
+                      └─▶ [LLM]        → str    (final answer)
+```
