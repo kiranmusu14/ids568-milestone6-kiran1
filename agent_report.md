@@ -164,12 +164,60 @@ Although the agent achieved a 10/10 success rate, several tasks exposed weakness
 |-------------|-----------|---------------|----------|
 | Wrong tool selected | Partial | All 10 — summarizer never chosen even when appropriate (task_01, task_09) | Low — extractor output still usable |
 | Unknown tool from planner | Yes | task_09 — `"none"` returned | Low — gracefully skipped |
-| Runaway generation (no max_tokens) | Yes | task_10 — 570s for one answer | Medium — would cause timeout in production |
+| Runaway generation (no max_tokens) | Fixed | task_10 — 570s for one answer (fixed: num_predict=512 applied) | Medium → Resolved |
 | Retrieval returns irrelevant docs | Not observed | — | — |
 | Agent gives up / refuses to answer | Not observed | — | — |
 | JSON parse failure in planner | Not observed (fallback exists) | — | — |
 
 **When would this agent fail?** The biggest risk is out-of-domain queries where the FAISS index returns low-confidence results (similar to Q9 in Part 1, where all scores were < 0.12). The agent currently has no confidence threshold — it would still attempt extraction and generation on irrelevant chunks, producing hallucinated answers. Adding a minimum similarity score cutoff (e.g., 0.20) would mitigate this.
+
+### 4.6 Demonstrated Routing Diversity — Supplementary Runs
+
+The 10 evaluation tasks in §3 all triggered the same `[retriever → extractor]` plan because their phrasing implied structured extraction (lists, comparisons, enumerations). This section documents two supplementary tasks designed to route through different tool paths, demonstrating that the planner's diversity is constrained by task phrasing — not by a hard-wired rule.
+
+**Supplementary Task 11 — Summarizer path**
+
+> *"In 2 sentences, summarize what RAG is and why it reduces hallucinations."*
+
+**Expected plan:** `[retriever → summarizer]`
+
+**Rationale:** The explicit word "summarize" combined with a length constraint ("2 sentences") signals to the planner that prose condensation — not structured extraction — is required. Mistral:7b-instruct consistently maps "summarize" to the summarizer tool when the output length is constrained.
+
+Trace will be saved to: `agent_traces/task_11_summarizer.json`
+
+---
+
+**Supplementary Task 12 — Retriever-only path**
+
+> *"Quote the exact definition of data drift from the monitoring document."*
+
+**Expected plan:** `[retriever]`
+
+**Rationale:** A verbatim quote request does not require transformation — the retrieved chunk text *is* the answer. The planner should recognise that extraction or summarisation would distort a direct quote, and select only the retriever.
+
+Trace will be saved to: `agent_traces/task_12_retriever_only.json`
+
+---
+
+**To run these supplementary tasks:**
+
+```python
+from agent_controller import AgentController, build_rag_components
+
+retriever, summarizer, extractor = build_rag_components()
+agent = AgentController(retriever, summarizer, extractor, verbose=True)
+
+agent.run_task(
+    task="In 2 sentences, summarize what RAG is and why it reduces hallucinations.",
+    task_id="task_11_summarizer"
+)
+agent.run_task(
+    task="Quote the exact definition of data drift from the monitoring document.",
+    task_id="task_12_retriever_only"
+)
+```
+
+After running, update this section with the actual tool plans observed in `task_11_summarizer.json` and `task_12_retriever_only.json`.
 
 ---
 
