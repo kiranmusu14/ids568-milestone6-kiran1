@@ -19,10 +19,10 @@
     "top1_score": 0.45521754026412964,
     "precision_at_3": 0.3333333333333333,
     "recall_at_3": 1.0,
-    "retrieval_ms": 1110.55,
-    "generation_s": 12.71,
-    "end_to_end_s": 13.82,
-    "answer": "RAG, or Retrieval-Augmented Generation, is a method used for question answering over private documents, technical support, and knowledge-intensive NLP tasks. One of its benefits is reduced hallucination because responses are grounded in retrieved evidence. This is achieved by explicitly instructing the model to answer only from provided context, as mentioned in the prompt engineering techniques source."
+    "retrieval_ms": 3622.94,
+    "generation_s": 11.28,
+    "end_to_end_s": 14.9,
+    "answer": "RAG, or Retrieval-Augmented Generation, is a system that enhances responses by integrating retrieved evidence. It reduces hallucinations in LLM (Language Learning Model) responses by grounding answers in retrieved context, as stated in the provided context. This grounding helps ensure that the generated answers are supported by the retrieved data, thereby reducing the likelihood of hallucinations."
   },
   {
     "q_num": 2,
@@ -32,22 +32,22 @@
       "doc_02"
     ],
     "retrieved_docs": [
-      "doc_02",
-      "doc_02",
-      "doc_02"
+      "doc_03",
+      "doc_03",
+      "doc_08"
     ],
     "retrieved_titles": [
-      "Vector Databases and Similarity Search",
-      "Vector Databases and Similarity Search",
-      "Vector Databases and Similarity Search"
+      "LLM Deployment and Serving",
+      "LLM Deployment and Serving",
+      "Monitoring ML Models in Production"
     ],
-    "top1_score": 0.5287177562713623,
-    "precision_at_3": 1.0,
-    "recall_at_3": 1.0,
-    "retrieval_ms": 1899.79,
-    "generation_s": 19.37,
-    "end_to_end_s": 21.27,
-    "answer": "The retrieved context does not specify all the differences between FAISS and Chroma, but it suggests that FAISS offers multiple index types for both exact and approximate nearest neighbor search, including IndexFlatL2 for exact Euclidean search and IndexFlatIP for inner product (cosine similarity after normalization). On the other hand, Chroma is a purpose-built open-source vector database with persistent storage, metadata filtering, and a simple Python API. It supports cosine and L2 distance metrics and integrates directly with LangChain and LlamaIndex. The context implies that Chroma may offer a better developer experience for some use cases due to its built-in persistence. However, the context does not provide information about performance or other aspects of the differences between FAISS and Chroma."
+    "top1_score": 0.15487855672836304,
+    "precision_at_3": 0.0,
+    "recall_at_3": 0.0,
+    "retrieval_ms": 1524.79,
+    "generation_s": 27.1,
+    "end_to_end_s": 28.62,
+    "answer": "The context provided does not contain information about FAISS or Chroma, so it's impossible to determine their differences based on this data."
   },
   {
     "q_num": 3,
@@ -69,10 +69,10 @@
     "top1_score": 0.5269613265991211,
     "precision_at_3": 0.3333333333333333,
     "recall_at_3": 1.0,
-    "retrieval_ms": 1614.04,
-    "generation_s": 8.27,
-    "end_to_end_s": 9.88,
-    "answer": "To deploy a 7B parameter language model locally, you can use the tool Ollama. The command to run this is: \"download Ollama, then run ollama pull mistral:7b-instr\"."
+    "retrieval_ms": 4812.08,
+    "generation_s": 14.53,
+    "end_to_end_s": 19.34,
+    "answer": "To deploy a 7B parameter language model locally, you can use Ollama. Follow these steps mentioned in the context:\n\n1. Download Ollama from its source.\n2. Run the command `ollama pull mistral:7b-instr` to download the specific 7B model for inference."
   },
   {
     "q_num": 4,
@@ -82,22 +82,22 @@
       "doc_04"
     ],
     "retrieved_docs": [
-      "doc_10",
       "doc_01",
+      "doc_04",
       "doc_05"
     ],
     "retrieved_titles": [
-      "Prompt Engineering Techniques",
       "Retrieval-Augmented Generation (RAG)",
+      "RAG Evaluation Metrics",
       "Text Chunking Strategies for RAG"
     ],
-    "top1_score": 0.14014500379562378,
-    "precision_at_3": 0.0,
-    "recall_at_3": 0.0,
-    "retrieval_ms": 835.96,
-    "generation_s": 11.14,
-    "end_to_end_s": 11.97,
-    "answer": "The provided context does not contain enough information to specify specific metrics for evaluating the quality of the Retrieval-Augmented Generation (RAG) pipeline. However, it does suggest that benefits of RAG include reduced hallucination because responses are grounded, and it mentions retrieval precision as a consideration with chunk sizes. Thus, one might evaluate the RAG pipeline using metrics such as precision, recall, F1 score, or other methods for assessing the groundedness and accuracy of the generated answers."
+    "top1_score": 0.45945030450820923,
+    "precision_at_3": 0.3333333333333333,
+    "recall_at_3": 1.0,
+    "retrieval_ms": 1970.43,
+    "generation_s": 9.08,
+    "end_to_end_s": 11.05,
+    "answer": "You can use Precision@k, Recall@k, Mean Reciprocal Rank (MRR), and Normalized Discounted Cumulative Gain (nDCG) to evaluate the quality of a RAG pipeline."
   },
   {
     "q_num": 5,
@@ -119,10 +119,10 @@
     "top1_score": 0.6775047779083252,
     "precision_at_3": 1.0,
     "recall_at_3": 1.0,
-    "retrieval_ms": 500.67,
-    "generation_s": 5.83,
-    "end_to_end_s": 6.33,
-    "answer": "Fixed-size character chunking with 512 characters and 100-character overlap provides a good balance for long technical documents, as stated in the context."
+    "retrieval_ms": 1686.12,
+    "generation_s": 17.03,
+    "end_to_end_s": 18.72,
+    "answer": "Fixed-size chunking with 512 characters and 100-character overlap provides a good balance for long technical documents, as stated in the context."
   },
   {
     "q_num": 6,
@@ -144,10 +144,10 @@
     "top1_score": 0.5742760896682739,
     "precision_at_3": 0.6666666666666666,
     "recall_at_3": 1.0,
-    "retrieval_ms": 319.27,
-    "generation_s": 7.57,
-    "end_to_end_s": 7.89,
-    "answer": "LoRA reduces the number of trainable parameters by representing updates as delta W equals A times B, where A has dimensions d by r and B has dimensions r by d with r much less than d. This results in a 99 percent reduction in trainable parameters compared to full fine-tuning."
+    "retrieval_ms": 1493.11,
+    "generation_s": 23.29,
+    "end_to_end_s": 24.79,
+    "answer": "LoRA reduces the number of trainable parameters by adding trainable low-rank decomposition matrices to frozen transformer weight matrices, where these decomposition matrices have dimensions significantly less than the original weight matrices. In the provided context, it is mentioned that if a weight matrix W has dimension d by d, LoRA represents the update as delta W equals A times B where A has dimensions d by r and B has dimensions r by d with r much less than d. This reduction in the size of trainable components leads to a significant decrease in the overall number of trainable parameters compared to full fine-tuning."
   },
   {
     "q_num": 7,
@@ -157,22 +157,22 @@
       "doc_07"
     ],
     "retrieved_docs": [
-      "doc_03",
-      "doc_03",
-      "doc_08"
+      "doc_07",
+      "doc_08",
+      "doc_07"
     ],
     "retrieved_titles": [
-      "LLM Deployment and Serving",
-      "LLM Deployment and Serving",
-      "Monitoring ML Models in Production"
+      "MLOps Best Practices",
+      "Monitoring ML Models in Production",
+      "MLOps Best Practices"
     ],
-    "top1_score": 0.14784184098243713,
-    "precision_at_3": 0.0,
-    "recall_at_3": 0.0,
-    "retrieval_ms": 392.67,
-    "generation_s": 11.74,
-    "end_to_end_s": 12.14,
-    "answer": "The retrieved context does not contain enough information to answer this question specifically regarding reproducible ML experiments. However, it does mention some best practices related to deploying large language models for inference, which could indirectly contribute to reproducibility:\n\n1. Careful consideration of hardware constraints and latency requirements.\n2. Use of a serving framework (e.g., vLLM) optimized for GPU inference.\n3. Direct model loading using specific tools like Hugging Face Transformers.\n4. Local deployment using lightweight tools like Ollama, which handles model downloading and provides a REST API."
+    "top1_score": 0.5616496205329895,
+    "precision_at_3": 0.6666666666666666,
+    "recall_at_3": 1.0,
+    "retrieval_ms": 1468.74,
+    "generation_s": 86.48,
+    "end_to_end_s": 87.94,
+    "answer": "The key practices for reproducible ML experiments, as outlined in the provided context, include:\n\n1. Experiment tracking with tools like MLflow, Weights and Biases, or DVC to log hyperparameters, metrics, artifacts, and code versions for every training run.\n2. Pinning random seeds.\n3. Documenting hardware configurations.\n4. Version-controlling datasets."
   },
   {
     "q_num": 8,
@@ -194,10 +194,10 @@
     "top1_score": 0.6750518679618835,
     "precision_at_3": 0.6666666666666666,
     "recall_at_3": 1.0,
-    "retrieval_ms": 307.51,
-    "generation_s": 7.66,
-    "end_to_end_s": 7.97,
-    "answer": "Detection methods for data drift include population stability index (PSI), Kolmogorov-Smirnov test for continuous features, chi-squared test for categorical features, and Maximum Mean Discrepancy (MMD). Some tools that automate drift detection are Evidently AI, WhyLogs, and Great Expectations."
+    "retrieval_ms": 3561.08,
+    "generation_s": 9.66,
+    "end_to_end_s": 13.22,
+    "answer": "Detection methods for data drift include population stability index (PSI), Kolmogorov-Smirnov test for continuous features, chi-squared test for categorical features, and Maximum Mean Discrepancy (MMD). Additionally, tools like Evidently AI, WhyLogs, and Great Expectations automate drift detection."
   },
   {
     "q_num": 9,
@@ -219,10 +219,10 @@
     "top1_score": 0.1492958664894104,
     "precision_at_3": 0.0,
     "recall_at_3": 0.0,
-    "retrieval_ms": 660.26,
-    "generation_s": 6.81,
-    "end_to_end_s": 7.47,
-    "answer": "The provided context does not contain enough information to answer this question about how sentence embeddings capture semantic similarity."
+    "retrieval_ms": 1272.71,
+    "generation_s": 22.03,
+    "end_to_end_s": 23.3,
+    "answer": "The context does not explicitly explain how sentence embeddings capture semantic similarity. However, it mentions that Hallucination monitoring uses \"embedding similarity between retrieved context and generated responses,\" implying that these embeddings may be used to measure the semantic similarity between sentences. Without further information, the specific method of capturing semantic similarity through sentence embeddings is not clear from the provided context."
   },
   {
     "q_num": 10,
@@ -244,9 +244,9 @@
     "top1_score": 0.5740107297897339,
     "precision_at_3": 1.0,
     "recall_at_3": 1.0,
-    "retrieval_ms": 481.29,
-    "generation_s": 6.81,
-    "end_to_end_s": 7.29,
-    "answer": "Chain-of-thought (CoT) prompting encourages models to generate intermediate reasoning steps before producing a final answer. It should be used for multi-step reasoning tasks, arithmetic, and logical inference, especially for models with more than 10B parameters."
+    "retrieval_ms": 1453.91,
+    "generation_s": 10.2,
+    "end_to_end_s": 11.65,
+    "answer": "Chain-of-thought (CoT) prompting encourages models to generate intermediate reasoning steps before producing a final answer. It is most effective for models with over 10B parameters, particularly on multi-step reasoning tasks, arithmetic, and logical inference. You should use it when you want the model to provide detailed step-by-step thought processes instead of direct answers."
   }
 ]
