@@ -6,6 +6,10 @@ MLOps Course | Module 7
 
 ## Architecture Overview
 
+![RAG Pipeline Architecture](rag_pipeline_diagram.png)
+
+*Full annotated diagram — see [`rag_pipeline_diagram.md`](rag_pipeline_diagram.md) for ASCII version and component details.*
+
 ```
 Part 1 — RAG Pipeline                Part 2 — Multi-Tool Agent
 ─────────────────────────────────    ──────────────────────────────────
