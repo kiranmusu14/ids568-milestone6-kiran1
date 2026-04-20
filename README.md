@@ -176,11 +176,13 @@ print(trace["final_answer"])
 
 | Metric | Value |
 |--------|-------|
-| Hit Rate@3 (doc-level) | **1.00** — correct document in top-3 for all 10 queries |
-| Hit Rate@1 (doc-level) | **0.80** — 8/10 queries ranked ground-truth doc first |
-| Precision@3 (chunk-level) | **0.633** avg |
-| Mean retrieval latency | **519 ms** (CPU embedding; FAISS search < 1 ms) |
-| Mean generation latency | **11.2 s** |
+| Hit Rate@3 (doc-level) | **0.80** — 8/10 queries retrieved ground-truth doc in top-3 (Q2 and Q9 failed) |
+| Hit Rate@1 (doc-level) | **0.70** — 7/10 queries ranked ground-truth doc first |
+| Precision@3 (chunk-level avg) | **0.500** |
+| Recall@3 (doc-level avg) | **0.800** |
+| Mean retrieval latency | **2,287 ms** (CPU embedding dominates; FAISS search < 1 ms) |
+| Mean generation latency | **23.1 s** |
+| Mean end-to-end latency | **25.4 s** |
 
 ### Part 2 — Multi-Tool Agent
 
