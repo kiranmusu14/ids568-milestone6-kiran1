@@ -141,7 +141,7 @@ QBW, QBH = 3.0, 0.75
 nodes = [
     # (x_left, y_bottom, label, sublabel, color)
     (0.3,  5.6, "User Query",        None,                           C_ONLINE),
-    (0.3,  4.5, "Query Embedder",    "all-MiniLM-L6-v2 · ~500 ms",  C_ONLINE),
+    (0.3,  4.5, "Query Embedder",    "all-MiniLM-L6-v2 · ~2.3 s CPU",  C_ONLINE),
     (0.3,  3.4, "Retriever",         "FAISS.search(q, k=3) · <1 ms", C_ONLINE),
     (0.3,  2.3, "Context Assembly",  "Concat chunks · format prompt", C_DECISION),
     (0.3,  1.2, "Generator",         "mistral:7b-instruct via Ollama · ≤512 tokens", C_ONLINE),
