@@ -892,6 +892,22 @@ class AgentController:
         }
         TRACES_DIR.mkdir(exist_ok=True)
 
+    def _retrieval_query(self, task: str) -> str:
+        """
+        Strip task-instruction prefixes before embedding so the retriever
+        focuses on the factual content of the question rather than planning words.
+        """
+        import re as _re
+        stripped = _re.sub(
+            r"^(in \d+ sentences?,?\s*|summarize\s+|find (information about|relevant information and summarize)\s*|"
+            r"quote the exact|extract the main|list and explain|compare different|explain how\s+)",
+            "",
+            task.lower(),
+            flags=_re.IGNORECASE,
+        ).strip()
+        # Fall back to full task if stripping removed everything meaningful
+        return stripped if len(stripped) > 20 else task
+
     def _normalize_plan(self, task: str, plan: List[Dict[str, str]]) -> List[Dict[str, str]]:
         """
         Apply lightweight routing heuristics so a few task types take the more
@@ -1090,8 +1106,9 @@ class AgentController:
                 }
 
                 if tool_name == "retriever":
-                    result = self.retriever(task)
-                    step_trace["input_preview"] = task[:120]
+                    retrieval_q = self._retrieval_query(task)
+                    result = self.retriever(retrieval_q)
+                    step_trace["input_preview"] = retrieval_q[:120]
                     step_trace["output"] = result
                     step_trace["latency_ms"] = result["latency_ms"]
                     for r in result["results"]:
@@ -1247,6 +1264,19 @@ EVAL_TASKS = [
     },
 ]
 
+SUPPLEMENTARY_TASKS = [
+    {
+        "id": "task_11_supplementary",
+        "task": "In 2 sentences, summarize what RAG is and why it reduces hallucinations.",
+    },
+    {
+        "id": "task_12_supplementary",
+        "task": "Quote the exact definition of data drift from the monitoring document.",
+    },
+]
+
+ALL_TASKS = EVAL_TASKS + SUPPLEMENTARY_TASKS
+
 
 # ── Component builder (shared with rag_pipeline.ipynb logic) ──────────────────
 def build_rag_components(
@@ -1314,7 +1344,7 @@ def main() -> None:
     # Select tasks
     tasks = EVAL_TASKS
     if args.task_id:
-        tasks = [t for t in EVAL_TASKS if t["id"] == args.task_id]
+        tasks = [t for t in ALL_TASKS if t["id"] == args.task_id]
         if not tasks:
             logger.error(f"Task '{args.task_id}' not found.")
             raise SystemExit(1)

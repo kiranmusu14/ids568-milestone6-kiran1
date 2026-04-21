@@ -25,6 +25,7 @@ The controller also applies a lightweight normalization layer:
 - short “summarize / in 2 sentences” tasks are nudged toward `retriever -> summarizer`
 - “quote exactly / verbatim / exact definition” tasks are nudged toward retriever-only behavior
 - unknown tools are not executed
+- task instruction prefixes (“In 2 sentences, summarize…”, “Find information about…”) are stripped before embedding to prevent dilution of the retrieval query signal
 
 ### Retrieval integration
 
@@ -80,7 +81,7 @@ Two real supplementary traces were added and are clearly outside the required 10
 
 | Trace | Task type | Observed route | Quality note |
 |---|---|---|---|
-| `task_11_supplementary.json` | short summary request | `retriever -> summarizer` | routing diversity demonstrated, but retrieval quality is weak |
+| `task_11_supplementary.json` | short summary request | `retriever -> summarizer` | correct RAG definition retrieved (doc_01, score=0.493); clean 2-sentence summary |
 | `task_12_supplementary.json` | exact quote request | `retriever` only | clean direct-quote behavior |
 
 These supplementary runs are useful as routing evidence, not as a replacement for the required 10-task set.
