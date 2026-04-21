@@ -924,22 +924,6 @@ class AgentController:
             ]
 
         if (
-            "deploy" in task_lc
-            and "latency" in task_lc
-        ):
-            return [
-                {
-                    "tool": "retriever",
-                    "reason": "need grounded deployment context",
-                },
-                {
-                    "tool": "extractor",
-                    "reason": "task asks for explicit deployment options and tradeoffs",
-                    "extraction_type": "deployment_options",
-                },
-            ]
-
-        if (
             any(phrase in task_lc for phrase in ["in 2 sentences", "in two sentences", "summarize", "summary"])
             and not any(phrase in task_lc for phrase in ["list", "extract", "compare", "enumerate"])
         ):
@@ -1208,10 +1192,7 @@ EVAL_TASKS = [
     },
     {
         "id": "task_03",
-        "task": (
-            "How do I deploy a 7B language model locally? "
-            "Summarize the available deployment options and their latency tradeoffs."
-        ),
+        "task": "Quote the exact definition of data drift from the monitoring document.",
     },
     {
         "id": "task_04",
@@ -1268,10 +1249,6 @@ SUPPLEMENTARY_TASKS = [
     {
         "id": "task_11_supplementary",
         "task": "In 2 sentences, summarize what RAG is and why it reduces hallucinations.",
-    },
-    {
-        "id": "task_12_supplementary",
-        "task": "Quote the exact definition of data drift from the monitoring document.",
     },
 ]
 

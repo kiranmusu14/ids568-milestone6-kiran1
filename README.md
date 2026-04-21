@@ -134,7 +134,7 @@ See [rag_evaluation_report.md](/Users/kiran14/Documents/IDS%20568/IDS-milstone6/
 The required 10 tasks all completed without runtime failure.
 
 - Runtime completion rate: 10/10
-- Routing in the required set: `retriever -> extractor` (7/10), `retriever -> summarizer` (3/10 — task_01, task_07, task_08), `retriever -> extractor -> extractor` (task_02)
+- Routing in the required set: `retriever -> extractor` (6/10), `retriever -> summarizer` (3/10 — task_01, task_07, task_08), `retriever` only (task_03), `retriever -> extractor -> extractor` (task_02)
 - All 10 traces have fresh timestamps from the current code version
 
 Supplementary traces:
